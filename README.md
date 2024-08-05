@@ -1,66 +1,193 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Teste Objective
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicação de sistema de gerenciamento de contas e transações financeiras. A seguir, você encontrará instruções para subir o ambiente utilizando Docker Compose e uma documentação das APIs disponíveis.
 
-## About Laravel
+## Pré-requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Docker
+- Docker Compose
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instruções para subir o ambiente
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clone o repositório**
 
-## Learning Laravel
+   ```sh
+   git clone https://github.com/seu-usuario/seu-repositorio.git
+   cd seu-repositorio
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Crie o arquivo .env**
+    
+- Copie o arquivo .env.example para .env
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. **Suba o ambiente com Docker Compose**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    ```sh
+    docker-compose up -d
+   ```
+- A aplicação estará disponível em localhost:8000.
 
-## Laravel Sponsors
+## Documentação das APIs ##
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Conta ###
 
-### Premium Partners
+**Criar uma Conta**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+**Endpoint: POST /conta**
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Requisição:**
 
-## Code of Conduct
+```json
+{
+    "numero_conta": 12345,
+    "saldo": 100.00
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Respostas:**
 
-## Security Vulnerabilities
+- 201 Created
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```json
+{
+    "numero_conta": 12345,
+    "saldo": "100.00"
+}
+```
 
-## License
+- 422 Unprocessable Entity (Exemplos de respostas de erro)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```json
+{
+    "errors": {
+        "numero_conta": [
+            "Número da conta é obrigatório",
+            "Número da conta só aceita números inteiros",
+            "Número da conta já existente"
+        ],
+        "saldo": [
+            "Saldo é obrigatório",
+            "Saldo só aceita números",
+            "Saldo deve ser no mínimo zero"
+        ]
+    }
+}
+```
+
+- 500 Internal Server Error
+
+```json
+{
+    "message": "Não foi possível criar a conta"
+}
+```
+
+**Consultar uma Conta**
+
+**Endpoint: GET /conta**
+
+**Requisição:**
+
+```json
+{
+    "numero_conta": 12345
+}
+```
+
+**Respostas:**
+
+- 200 OK
+
+```json
+{
+    "numero_conta": 12345,
+    "saldo": "100.00"
+}
+```
+
+- 404 Not Found
+
+```json
+{
+    "message": "Conta não encontrada"
+}
+```
+
+- 422 Unprocessable Entity (Exemplos de respostas de erro)
+
+```json
+{
+    "errors": {
+        "numero_conta": [
+            "Número da conta é obrigatório",
+            "Número da conta só aceita números inteiros"
+        ]
+    }
+}
+```
+
+### Transação ###
+
+**Criar uma Transação**
+
+**Endpoint: POST /transacao**
+
+**Requisição:**
+
+```json
+{
+  "forma_pagamento": "D",
+  "numero_conta": 12345,
+  "valor": 50.00
+}
+```
+**Respostas:**
+
+- 201 Created
+
+```json
+{
+  "numero_conta": 12345,
+  "saldo": "50.00"
+}
+```
+
+- 404 Not Found
+
+```json
+{
+    "message": "Saldo Insuficiente"
+}
+```
+
+- 422 Unprocessable Entity (Exemplos de respostas de erro)
+
+```json
+{
+    "errors": {
+        "numero_conta": [
+            "Número da conta é obrigatório",
+            "Número da conta só aceita números inteiros"
+        ],
+        "forma_pagamento": [
+            "Forma de pagamento é obrigatória",
+            "Forma de pagamento deve ser D (débito), C (crédito) ou P (pix)"
+        ],
+        "valor": [
+            "Valor é obrigatório",
+            "Valor só aceita números",
+            "Valor deve ser no mínimo zero"
+        ]
+    }
+}
+```
+
+- 500 Internal Server Error
+
+```json
+{
+    "message": "Erro ao gravar transação"
+}
+```
+

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\NotEnoughBalanceException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -48,5 +49,31 @@ class Account extends Model
         }
 
         return self::getAccountByNumber($number);
+    }
+
+    /**
+     * Check if account has enough balance for the transaction
+     * @param $value
+     * @return bool
+     */
+    public function hasEnoughBalance($value): bool
+    {
+        return ($this->balance + $value) > 0;
+    }
+
+    /**
+     * Update balance with given value
+     * @param $value
+     * @return bool
+     * @throws NotEnoughBalanceException
+     */
+    public function updateBalance($value): bool
+    {
+        if(!$this->hasEnoughBalance($value)) {
+            throw new NotEnoughBalanceException("Saldo insuficiente");
+        }
+
+        $this->balance = $this->balance + $value;
+        return $this->save();
     }
 }

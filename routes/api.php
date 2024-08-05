@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\AccountController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix("conta")->group(function() {
     Route::post("/", [AccountController::class, "store"]);
     Route::get("/", [AccountController::class, "show"]);
+});
+
+Route::prefix("transacao")->group(function() {
+    Route::post("/", [PaymentController::class, "store"]);
 });
 

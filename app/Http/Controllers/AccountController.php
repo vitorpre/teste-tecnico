@@ -30,10 +30,10 @@ class AccountController extends Controller
 
     }
 
-    public function show(AccountShowRequest $request, string $number):JsonResponse
+    public function show(AccountShowRequest $request):JsonResponse
     {
 
-        $account = Account::getAccountByNumber($number);
+        $account = Account::getAccountByNumber($request->input("numero_conta"));
 
         if(!$account) {
             return response()->json(["message" => "Conta não encontrada"], 404);

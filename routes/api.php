@@ -21,6 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix("conta")->group(function() {
     Route::post("/", [AccountController::class, "store"]);
-    Route::get("/{number}", [AccountController::class, "show"]);
+    Route::get("/", [AccountController::class, "show"]);
 });
 

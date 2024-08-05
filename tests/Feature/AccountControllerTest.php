@@ -27,7 +27,7 @@ class AccountControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJson([
                 'numero_conta' => '123456',
-                'saldo' => 1000
+                'saldo' => '1,000.00'
             ]);
     }
 
@@ -43,7 +43,7 @@ class AccountControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'numero_conta' => '123456',
-                'saldo' => 1000
+                'saldo' => '1,000.00'
             ]);
     }
 

@@ -12,7 +12,7 @@ class AccountParser
     {
         return response()->json([
             "numero_conta" => $account->number,
-            "saldo" => $account->balance,
+            "saldo" => number_format($account->balance, 2),
         ], 201);
     }
 
@@ -20,7 +20,7 @@ class AccountParser
     {
         return response()->json([
             "numero_conta" => $account->number,
-            "saldo" => $account->balance,
+            "saldo" => number_format($account->balance, 2),
         ], 200);
     }
 }

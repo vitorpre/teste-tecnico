@@ -22,25 +22,15 @@ class AccountShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "number" => "required|integer",
+            "numero_conta" => "required|integer",
         ];
     }
 
     public function messages()
     {
         return [
-            'number.required' => 'Número da conta é obrigatório',
-            'number.integer' => 'Número da conta só aceita números inteiros',
+            'numero_conta.required' => 'Número da conta é obrigatório',
+            'numero_conta.integer' => 'Número da conta só aceita números inteiros',
         ];
-    }
-
-    /**
-     * Get the data to be validated from the request.
-     *
-     * @return array
-     */
-    public function validationData()
-    {
-        return array_merge($this->request->all(), $this->route()->parameters());
     }
 }

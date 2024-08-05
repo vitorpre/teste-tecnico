@@ -44,7 +44,7 @@ class PaymentController extends Controller
             return response()->json(["message" => "Saldo insuficiente"], 404);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(["message" => "Erro ao gravar transação" . $e->getMessage()], 500);
+            return response()->json(["message" => "Erro ao gravar transação"], 500);
         }
 
         DB::commit();
